@@ -13,7 +13,7 @@ export const useQuery = <TQuery extends LiveQueryDef.Any>(
 
   const data = ref(store?.query(queryDef)) as LiveQueries.GetResult<TQuery>
 
-  const unsubscribe = store?.subscribe(data, {
+  const unsubscribe = store?.subscribe(queryDef, {
     onUpdate: (result) => {
       data.value = result
     }

@@ -6,46 +6,42 @@ import { useStore, useQuery } from 'vue-livestore'
 
 const { store } = useStore()
 
-// // Query & subscription
+// Query & subscription
 
-// const visibleTodos$ = queryDb(
-//   (get) => {
-//     return tables.todos.where({
-//       deletedAt: null
-//     })
-//   },
-//   { label: 'visibleTodos' }
-// )
+const visibleTodos$ = queryDb(
+  (get) => {
+    return tables.todos.where({
+      deletedAt: null
+    })
+  },
+  { label: 'visibleTodos' }
+)
 
-// const todos = useQuery(visibleTodos$)
+const todos = useQuery(visibleTodos$)
 
-// // Events
+// Events
 
-// const newTodoText = ref('')
-// const createTodo = () => {
-//   store.commit(events.todoCreated({ id: crypto.randomUUID(), text: newTodoText.value }))
-//   newTodoText.value = ''
-// }
+const newTodoText = ref('')
+const createTodo = () => {
+  store.commit(events.todoCreated({ id: crypto.randomUUID(), text: newTodoText.value }))
+  newTodoText.value = ''
+}
 
-// const deleteTodo = (id: string) => {
-//   store.commit(events.todoDeleted({ id, deletedAt: new Date() }))
-// }
+const deleteTodo = (id: string) => {
+  store.commit(events.todoDeleted({ id, deletedAt: new Date() }))
+}
 
-// const toggleCompleted = (id: string) => {
-//   if (todos.value.find((todo) => todo.id === id)?.completed) {
-//     store.commit(events.todoUncompleted({ id }))
-//   } else {
-//     store.commit(events.todoCompleted({ id }))
-//   }
-// }
+const toggleCompleted = (id: string) => {
+  if (todos.value.find((todo) => todo.id === id)?.completed) {
+    store.commit(events.todoUncompleted({ id }))
+  } else {
+    store.commit(events.todoCompleted({ id }))
+  }
+}
 </script>
 
 <template>
-  <div>
-    HERE
-    {{ store }}
-  </div>
-  <!-- <div class="todos">
+  <div class="todos">
     Todos
     <div class="new-todo">
       <input
@@ -66,7 +62,7 @@ const { store } = useStore()
       <button @click="toggleCompleted(todo.id)">Complete</button>
       <button @click="deleteTodo(todo.id)">Delete</button>
     </div>
-  </div> -->
+  </div>
 </template>
 
 <style>
