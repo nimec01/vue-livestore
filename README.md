@@ -112,7 +112,7 @@ const createTodo = () => {
 
 ## TODO
 - [ ] useClientDoument composable
-- [ ] tests
+- [x] tests
 
 ## Comments
 **Why not a Vue plugin instead of a provider?**
