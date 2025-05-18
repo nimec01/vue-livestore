@@ -23,8 +23,7 @@ Follow the [React Web example](https://dev.docs.livestore.dev/getting-started/re
 
 ### Wrap the App.vue in a LiveStoreProvider
 
-```markdown
-```vue filename=App.vue
+```vue
 <script setup lang="ts">
 import { makePersistedAdapter } from '@livestore/adapter-web'
 import LiveStoreSharedWorker from '@livestore/adapter-web/shared-worker?sharedworker'
@@ -55,12 +54,10 @@ const storeOptions = {
   </LiveStoreProvider>
 </template>
 ```
-```
 
 ### Load the store, query data and commit events
 
-```markdown
-```vue filename=components/todos.vue
+```vue
 <script setup lang="ts">
 import { ref } from 'vue'
 import { queryDb } from '@livestore/livestore'
