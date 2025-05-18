@@ -23,8 +23,8 @@ Follow the [React Web example](https://dev.docs.livestore.dev/getting-started/re
 
 ### Wrap the App.vue in a LiveStoreProvider
 
-**App.vue**
-```
+```markdown
+```vue filename=App.vue
 <script setup lang="ts">
 import { makePersistedAdapter } from '@livestore/adapter-web'
 import LiveStoreSharedWorker from '@livestore/adapter-web/shared-worker?sharedworker'
@@ -55,10 +55,12 @@ const storeOptions = {
   </LiveStoreProvider>
 </template>
 ```
+```
 
 ### Load the store, query data and commit events
 
-```
+```markdown
+```vue filename=components/todos.vue
 <script setup lang="ts">
 import { ref } from 'vue'
 import { queryDb } from '@livestore/livestore'
@@ -112,8 +114,8 @@ const createTodo = () => {
 ```
 
 ## TODO
-[] useClientDoument composable
-[] tests
+- [ ] useClientDoument composable
+- [ ] tests
 
 ## Comments
 **Why not a Vue plugin instead of a provider?**
