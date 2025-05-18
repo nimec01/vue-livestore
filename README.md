@@ -6,9 +6,9 @@ This is still an early version of Vue bindings for LiveStore. Haven't published 
 
 ## Key components:
 
-**LiveStoreProvider**: Creates the store and provides it to the rest of the wrapped app.
-**useStore()**: Composables to load (inject) the store
-**useQuery()**: Composable to create reactive read-only live queries
+-**LiveStoreProvider**: Creates the store and provides it to the rest of the wrapped app.
+-**useStore()**: Composables to load (inject) the store
+-**useQuery()**: Composable to create reactive read-only live queries
 
 ## Usage
 
