@@ -5,7 +5,13 @@ import { mount } from '@vue/test-utils'
 import { LiveStoreProvider } from '../src/provider'
 import { useStore, useQuery } from '../src'
 import { defineComponent, h, nextTick } from 'vue'
-import flushPromises from 'flush-promises'
+
+const scheduler = typeof setImmediate === 'function' ? setImmediate : setTimeout;
+function flushPromises() {
+  return new Promise(function (resolve) {
+    scheduler(resolve);
+  });
+}
 
 export type Todo = {
   id: string
