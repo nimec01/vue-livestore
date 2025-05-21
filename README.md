@@ -50,7 +50,7 @@ const visibleTodos$ = queryDb(
 )
 const todosQuery = useQuery(visibleTodos$)
 
-store.commit(events.todoCreated({ id: crypto.randomUUID(), text: newTodoText.value }))
+store.commit(events.todoCreated({ id: crypto.randomUUID(), text: "Write documentation" }))
 ```
 
 ## TODO
