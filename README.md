@@ -14,7 +14,7 @@ This is still an early version of Vue bindings for LiveStore. Haven't published 
 
 ## Usage
 
-**For full working example see code in playground.**
+**For full working example see code in [playground](https://github.com/slashv/vue-livestore/tree/main/playground).**
 
 Follow the [React Web example](https://dev.docs.livestore.dev/getting-started/react-web/) on the LiveStore docs to:
 1. Adjust Vite config

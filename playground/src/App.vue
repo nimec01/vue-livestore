@@ -4,7 +4,7 @@ import LiveStoreSharedWorker from '@livestore/adapter-web/shared-worker?sharedwo
 import LiveStoreWorker from './livestore/livestore.worker?worker'
 import { schema } from './livestore/schema'
 import { LiveStoreProvider } from 'vue-livestore'
-import Todos from './components/todos.vue'
+import ToDos from './components/to-dos.vue'
 
 const adapter = makePersistedAdapter({
   storage: { type: 'opfs' },
@@ -24,6 +24,6 @@ const storeOptions = {
     <template #loading>
       <div>Loading LiveStore...</div>
     </template>
-    <Todos />
+    <ToDos />
   </LiveStoreProvider>
 </template>

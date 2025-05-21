@@ -21,6 +21,7 @@ export const LiveStoreProvider = defineComponent({
     // Inject a proxy immediately so that useStore() can be called while loading.
     provide(
       LiveStoreKey,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       new Proxy({} as any, {
         get(_, key) {
           if (!storeRef.value) throw new Error('LiveStore not initialized yet')

@@ -8,11 +8,7 @@ const { store } = useStore()
 
 // Query & subscription
 const visibleTodos$ = queryDb(
-  (get) => {
-    return tables.todos.where({
-      deletedAt: null,
-    })
-  },
+  () => tables.todos.where({ deletedAt: null }),
   { label: 'visibleTodos' },
 )
 

@@ -1,5 +1,5 @@
 import { inject, type InjectionKey } from 'vue'
-import { type Store, } from '@livestore/livestore'
+import { type Store, type LiveQueryDef } from '@livestore/livestore'
 import { useQuery } from '.'
 
 export type VueApi = {
@@ -10,9 +10,9 @@ export type LiveStoreInstance = Store & VueApi
 
 export const LiveStoreKey: InjectionKey<LiveStoreInstance> = Symbol('LiveStore')
 
-export const withVueApi = (store: Store): LiveStoreInstance => {
-  // @ts-ignore
-  store.useQuery = (queryDef: any) => useQuery(queryDef, { store })
+export const withVueApi = <TQuery extends LiveQueryDef.Any>(store: Store): LiveStoreInstance => {
+  // @ts-expect-error TODO figure out best way to resolve
+  store.useQuery = (queryDef: TQuery) => useQuery(queryDef, { store })
   return store as LiveStoreInstance
 }
 

@@ -1,8 +1,6 @@
-# Vue LiveStore - WIP
+# Vue LiveStore Example
 
-Stay tuned...
-
-## Running the example
+## Running
 
 ```bash
 pnpm install
