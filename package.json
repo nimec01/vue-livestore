@@ -23,6 +23,8 @@
   "scripts": {
     "build": "unbuild",
     "dev": "vitest dev",
+    "prepare": "simple-git-hooks",
+    "prepack": "pnpm build",
     "type-check": "vue-tsc --build",
     "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
     "lint:eslint": "eslint . --fix",
