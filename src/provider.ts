@@ -32,7 +32,7 @@ export const LiveStoreProvider = defineComponent({
       }),
     )
 
-    // start async store creation
+    // Initiate async store creation
     createStorePromise(props.options).then((store) => {
       storeRef.value = withVueApi(store)
     })

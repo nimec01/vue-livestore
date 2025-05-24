@@ -2,7 +2,12 @@
 
 **[!] LiveStore still in private preview - See [LiveStore site](https://livestore.dev/) for updates and information**
 
-This is still an early version of Vue bindings for LiveStore. Haven't published the package on npm yet because not sure if the LiveStore project would prefer it to be integrated into the main LiveStore repo as is the case for React, Solid, Expo etc.
+Currently in beta with plan to mature alongside LiveStore. Happy to accept suggestions for improvement and contributions. See list of todos below for pending areas.
+
+## Installation
+```bash
+pnpm install vue-livestore
+```
 
 ## Key components:
 
@@ -41,11 +46,7 @@ import { useStore, useQuery } from 'vue-livestore'
 const { store } = useStore()
 
 const visibleTodos$ = queryDb(
-  (get) => {
-    return tables.todos.where({
-      deletedAt: null,
-    })
-  },
+  () => tables.todos.where({ deletedAt: null, })
   { label: 'visibleTodos' },
 )
 const todosQuery = useQuery(visibleTodos$)
@@ -54,9 +55,10 @@ store.commit(events.todoCreated({ id: crypto.randomUUID(), text: "Write document
 ```
 
 ## TODO
-- [ ] useClientDoument composable
-- [x] tests
+- [ ] Multiple stores support
+- [ ] useClientDocument composable
+- [ ] Nuxt integration (might be separate repo or just example implementation)
 
 ## Comments
 **Why not a Vue plugin instead of a provider?**
-Plugins are more common in the Vue ecosystem so I started by implementing the store creation logic as a Vue plugin but I ran into some problems because plugin code can't be async as I understand it. There probably is a way to solve that but I also think the provider pattern works very well in this scenario because it makes it easy to define a loading state and aligns well with the React LiveStore integration.
+A Vue plugin would probably be more idiomatic to the Vue ecosystem but a provider has the benefit of easily designating a loading slot. It also matches better to the React implementation for LiveStore which makes generalising examles easier. It's possible as this project matures we might switch to a plugin structure if it makes sense. We would also see what the best option would be when integrating into Nuxt.
