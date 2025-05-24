@@ -6,6 +6,9 @@ Currently in beta with plan to mature alongside LiveStore. Happy to accept sugge
 
 ## Installation
 ```bash
+# Install LiveStore
+pnpm install @livestore/livestore @livestore/wa-sqlite@1.0.5-dev.2 @livestore/adapter-web @livestore/utils @livestore/peer-deps @livestore/devtools-vite
+# Install vue-livestore
 pnpm install vue-livestore
 ```
 
@@ -60,5 +63,5 @@ store.commit(events.todoCreated({ id: crypto.randomUUID(), text: "Write document
 - [ ] Nuxt integration (might be separate repo or just example implementation)
 
 ## Comments
-**Why not a Vue plugin instead of a provider?**
-A Vue plugin would probably be more idiomatic to the Vue ecosystem but a provider has the benefit of easily designating a loading slot. It also matches better to the React implementation for LiveStore which makes generalising examles easier. It's possible as this project matures we might switch to a plugin structure if it makes sense. We would also see what the best option would be when integrating into Nuxt.
+**Why not a Vue plugin instead of provider pattern?**
+A Vue plugin would probably be more idiomatic to the Vue ecosystem but a provider has the benefit of easily designating a loading slot. It also matches better to the React implementation for LiveStore which makes generalising examples easier. It's possible as this package matures we might switch to a plugin structure if it makes sense. We would also see what the best option would be when integrating into Nuxt.
