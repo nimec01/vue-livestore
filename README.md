@@ -43,7 +43,7 @@ Follow the [React Web example for an existing project](https://docs.livestore.de
 
 ### useStore and useQuery composables
 
-```vue
+```ts
 import { queryDb } from '@livestore/livestore'
 import { events, tables } from '../livestore/schema'
 import { useStore, useQuery } from 'vue-livestore'
