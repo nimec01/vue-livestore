@@ -29,7 +29,7 @@ pnpm install vue-livestore
 
 **For full working example see code in [playground](https://github.com/slashv/vue-livestore/tree/main/playground).**
 
-Follow the [React Web example for an existing project](https://docs.livestore.dev/getting-started/react-web/#existing-project-setup) on the LiveStore docs to:
+Follow the [Vue LiveStore example for an existing project](https://docs.livestore.dev/getting-started/vue/) to:
 1. Adjust Vite config
 2. Create livestore/livestore.worker.ts
 3. Create livestore/schema.ts
