@@ -5,6 +5,9 @@
 Currently in beta with plan to mature alongside LiveStore. Happy to accept suggestions for improvement and contributions. See list of todos below for pending areas.
 
 ## Installation
+
+It's strongly recommended to use `bun` or `pnpm` for the simplest and most reliable dependency setup (see [note on package management](https://docs.livestore.dev/misc/package-management/) for more details).
+
 **Install LiveStore**
 ```bash
 pnpm install @livestore/livestore @livestore/wa-sqlite@1.0.5-dev.2 @livestore/adapter-web @livestore/utils @livestore/peer-deps @livestore/devtools-vite
