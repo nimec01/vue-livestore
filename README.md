@@ -5,10 +5,12 @@
 Currently in beta with plan to mature alongside LiveStore. Happy to accept suggestions for improvement and contributions. See list of todos below for pending areas.
 
 ## Installation
+**Install LiveStore**
 ```bash
-# Install LiveStore
 pnpm install @livestore/livestore @livestore/wa-sqlite@1.0.5-dev.2 @livestore/adapter-web @livestore/utils @livestore/peer-deps @livestore/devtools-vite
-# Install vue-livestore
+```
+**Install vue-livestore**
+```bash
 pnpm install vue-livestore
 ```
 
@@ -24,7 +26,7 @@ pnpm install vue-livestore
 
 **For full working example see code in [playground](https://github.com/slashv/vue-livestore/tree/main/playground).**
 
-Follow the [React Web example](https://dev.docs.livestore.dev/getting-started/react-web/) on the LiveStore docs to:
+Follow the [React Web example for an existing project](https://docs.livestore.dev/getting-started/react-web/#existing-project-setup) on the LiveStore docs to:
 1. Adjust Vite config
 2. Create livestore/livestore.worker.ts
 3. Create livestore/schema.ts
