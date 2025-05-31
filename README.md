@@ -1,6 +1,6 @@
 # Vue bindings for LiveStore
 
-Vue LiveStore is in beta with intention to mature alongside LiveStore. Happy to accept suggestions for improvement and contributions. See list of todos below for pending areas.
+Vue LiveStore is in beta with intention to mature alongside [LiveStore](https://livestore.dev/). Happy to accept suggestions for improvement and contributions. See list of todos below for pending areas.
 
 ## Installation
 
