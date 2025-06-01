@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
 import { queryDb } from '@livestore/livestore'
 import { events, tables } from '../livestore/schema'
 import { useStore, useQuery, useClientDocument } from 'vue-livestore'
@@ -7,18 +6,26 @@ import { useStore, useQuery, useClientDocument } from 'vue-livestore'
 const { store } = useStore()
 
 // Query & subscription
+const uiState$ = queryDb(tables.uiState.get(), { label: 'uiState' })
+
 const visibleTodos$ = queryDb(
-  () => tables.todos.where({ deletedAt: null }),
+  (get) => {
+    const filter = get(uiState$).filter
+    return tables.todos.where({
+      deletedAt: null,
+      completed: filter === 'all' ? undefined : filter === 'completed'
+    })
+  },
   { label: 'visibleTodos' },
 )
 
-const { state: uiState, setState } = useClientDocument(tables.uiState)
+const { newTodoText, filter } = useClientDocument(tables.uiState)
 const todos = useQuery(visibleTodos$)
 
 // Events
 const createTodo = () => {
-  store.commit(events.todoCreated({ id: crypto.randomUUID(), text: uiState.value.newTodoText }))
-  uiState.value.newTodoText = ''
+  store.commit(events.todoCreated({ id: crypto.randomUUID(), text: newTodoText.value }))
+  newTodoText.value = ''
 }
 
 const deleteTodo = (id: string) => {
@@ -32,16 +39,10 @@ const toggleCompleted = (id: string) => {
     store.commit(events.todoCompleted({ id }))
   }
 }
-
-const newTodoText = computed<string>({
-  get: () => uiState.value.newTodoText,
-  set: (value: any) => setState({ newTodoText: value })
-})
 </script>
 
 <template>
   <div class="todos">
-    {{ uiState }}<br>
     Todos
     <div class="new-todo">
       <input
@@ -51,10 +52,19 @@ const newTodoText = computed<string>({
       />
       <button @click="createTodo">Add Todo</button>
     </div>
-    <div>
-      <button @click="setState({ filter: 'all' })">All</button>
-      <button @click="setState({ filter: 'active' })">Active</button>
-      <button @click="setState({ filter: 'completed' })">Completed</button>
+    <div class="filters">
+      <button
+        @click="filter = 'all'"
+        :class="{ active: filter === 'all' }"
+      >All</button>
+      <button
+        @click="filter = 'active'"
+        :class="{ active: filter === 'active' }"
+      >Active</button>
+      <button
+        @click="filter = 'completed'"
+        :class="{ active: filter === 'completed' }"
+      >Completed</button>
     </div>
     <div
       v-for="todo in todos"
@@ -87,5 +97,15 @@ const newTodoText = computed<string>({
   gap: 10px;
   align-items: center;
   justify-content: space-between;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+}
+
+.filters button.active {
+  background-color: #000;
+  color: #fff;
 }
 </style>

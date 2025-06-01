@@ -1,29 +1,46 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { onUnmounted, shallowRef, type Ref } from 'vue'
+import { onUnmounted, shallowRef, computed, type WritableComputedRef } from 'vue'
 
 import { queryDb, type SessionIdSymbol, type State, type RowQuery, type LiveQueryDef } from '@livestore/livestore'
 
 import { useStore } from './store'
 
-type TTableDef = State.SQLite.ClientDocumentTableDef.Trait<
-  any,
-  any,
-  any,
-  { partialSet: boolean; default: { id: string | SessionIdSymbol; value: any } }
->
+type ClientDocumentTable<Value extends Record<string, any>> =
+  State.SQLite.ClientDocumentTableDef.Trait<
+    any,
+    any,
+    Value,
+    { partialSet: boolean; default: { id: string | SessionIdSymbol; value: Value } }
+  >
 
-interface UseClientDocumentResult<T> {
-  state: Readonly<Ref<TTableDef['Value']>>
-  setState: (value: TTableDef['Value']) => void
-  id: string | typeof SessionIdSymbol,
-  query$: LiveQueryDef<T>
+type UseClientDocumentResult<Value extends Record<string, any>> = {
+  id: string | typeof SessionIdSymbol
+  query$: LiveQueryDef<Value>
+} & {
+  [K in keyof Value]: WritableComputedRef<Value[K]>
 }
 
-export function useClientDocument<T = any>(
-  table: TTableDef,
+export function useClientDocument<Value extends Record<string, any>>(
+  table: ClientDocumentTable<Value>,
   id?: string | typeof SessionIdSymbol,
-  options?: RowQuery.GetOrCreateOptions<TTableDef>,
-): UseClientDocumentResult<T> {
+  options?: RowQuery.GetOrCreateOptions<ClientDocumentTable<Value>>,
+): UseClientDocumentResult<Value> {
+  /* Used for clientDocuments only (UI state)
+   *
+   * Returns:
+   * - ...uiState variabels as writable computed refs
+   * - 'id': Document ID
+   * - 'query$': LiveQuery that can be used to subscribe to changes in document
+   *
+   * This composable functions different to the React hook useClientDocument
+   * which returns state and setState in a more React way. The approach chosen
+   * here allows us to write nice code like this:
+   *
+   * const { newTodoText, filters } = useClientDocument(tables.uiState)
+   * ...
+   * <input v-model="newTodoText" ...>
+   * <select v-model="filters" ...>
+   */
 
   const { store } = useStore()
 
@@ -37,23 +54,33 @@ export function useClientDocument<T = any>(
   }
 
   const query$ = queryDb(table.get(documentId, options))
-  const state = shallowRef(store.query(query$))
+  const state = shallowRef<Value>(store.query(query$))
 
   const unsubscribe = store.subscribe(query$, {
-    onUpdate: (result: T) => {
+    onUpdate: (result: Value) => {
       state.value = result
     }
   })
 
-  const setState = (value: TTableDef['Value']) => {
+  const setState = (value: Value) => {
     store.commit(table.set(value, documentId))
+  }
+
+  type V = Value
+  const computedFields = {} as { [K in keyof V]: WritableComputedRef<V[K]> }
+  for (const key in state.value) {
+    computedFields[key as keyof V] = computed({
+      get: () => state.value[key as keyof V],
+      set: (value: V[keyof V]) => {
+        setState({ ...state.value, [key]: value })
+      }
+    })
   }
 
   onUnmounted(() => unsubscribe())
 
   return {
-    state,
-    setState,
+    ...computedFields,
     id: documentId,
     query$
   }
