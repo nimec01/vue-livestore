@@ -23,6 +23,8 @@ pnpm install vue-livestore
 
 **useQuery()**: Composable to create reactive read-only live queries
 
+**useClientDocument()**: Composable to get reactive writable client state variables
+
 ## Usage
 
 **For full working example see code in [playground](https://github.com/slashv/vue-livestore/tree/main/playground).**
@@ -60,9 +62,30 @@ const todosQuery = useQuery(visibleTodos$)
 store.commit(events.todoCreated({ id: crypto.randomUUID(), text: "Write documentation" }))
 ```
 
+### useClientDocument
+
+Serializes the client document variables into writable computed refs directly from the composable so we can write code like this:
+
+```vue
+<script setup lang="ts">
+import { tables } from '../livestore/schema'
+
+const { newTodoText, filters } = useClientDocument(tables.uiState)
+</script>
+
+<template>
+<input type="text" v-model="newTodoText">
+
+<select v-model="filters">
+  <option value="all">All</option>
+  ...
+<select>
+</template>
+```
+
 ## TODO
 - [ ] Multiple stores support
-- [ ] useClientDocument composable
+- [x] useClientDocument composable
 - [ ] Nuxt integration (might be separate repo or just example implementation)
 
 ## Comments

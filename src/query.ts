@@ -1,4 +1,4 @@
-import { ref, onUnmounted, type Ref } from 'vue'
+import { shallowRef, onUnmounted, type Ref } from 'vue'
 
 import type { LiveQueryDef, Store } from '@livestore/livestore'
 import type { LiveQueries } from '@livestore/livestore/internal'
@@ -11,10 +11,12 @@ export const useQuery = <TQuery extends LiveQueryDef.Any>(
 ): Readonly<Ref<LiveQueries.GetResult<TQuery>>> => {
   const { store } = useStore(options)
 
-  const data = ref(store?.query(queryDef) as LiveQueries.GetResult<TQuery>) as Ref<LiveQueries.GetResult<TQuery>>
+  type Result = LiveQueries.GetResult<TQuery>
 
-  const unsubscribe = store?.subscribe(queryDef, {
-    onUpdate: (result) => {
+  const data = shallowRef(store?.query(queryDef as any) as Result) // eslint-disable-line @typescript-eslint/no-explicit-any
+
+  const unsubscribe = store?.subscribe(queryDef as any, { // eslint-disable-line @typescript-eslint/no-explicit-any
+    onUpdate: (result: Result) => {
       data.value = result
     }
   })

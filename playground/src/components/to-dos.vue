@@ -1,21 +1,28 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { queryDb } from '@livestore/livestore'
 import { events, tables } from '../livestore/schema'
-import { useStore, useQuery } from 'vue-livestore'
+import { useStore, useQuery, useClientDocument } from 'vue-livestore'
 
 const { store } = useStore()
 
 // Query & subscription
+const uiState$ = queryDb(tables.uiState.get(), { label: 'uiState' })
+
 const visibleTodos$ = queryDb(
-  () => tables.todos.where({ deletedAt: null }),
+  (get) => {
+    const filter = get(uiState$).filter
+    return tables.todos.where({
+      deletedAt: null,
+      completed: filter === 'all' ? undefined : filter === 'completed'
+    })
+  },
   { label: 'visibleTodos' },
 )
 
+const { newTodoText, filter } = useClientDocument(tables.uiState)
 const todos = useQuery(visibleTodos$)
 
 // Events
-const newTodoText = ref('')
 const createTodo = () => {
   store.commit(events.todoCreated({ id: crypto.randomUUID(), text: newTodoText.value }))
   newTodoText.value = ''
@@ -44,6 +51,20 @@ const toggleCompleted = (id: string) => {
         @keyup.enter="createTodo"
       />
       <button @click="createTodo">Add Todo</button>
+    </div>
+    <div class="filters">
+      <button
+        @click="filter = 'all'"
+        :class="{ active: filter === 'all' }"
+      >All</button>
+      <button
+        @click="filter = 'active'"
+        :class="{ active: filter === 'active' }"
+      >Active</button>
+      <button
+        @click="filter = 'completed'"
+        :class="{ active: filter === 'completed' }"
+      >Completed</button>
     </div>
     <div
       v-for="todo in todos"
@@ -76,5 +97,15 @@ const toggleCompleted = (id: string) => {
   gap: 10px;
   align-items: center;
   justify-content: space-between;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+}
+
+.filters button.active {
+  background-color: #000;
+  color: #fff;
 }
 </style>
