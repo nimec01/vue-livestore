@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { shallowRef, onUnmounted, computed, type WritableComputedRef } from 'vue'
+import { onUnmounted, shallowRef, type Ref } from 'vue'
 
 import { queryDb, type SessionIdSymbol, type State, type RowQuery, type LiveQueryDef } from '@livestore/livestore'
 
 import { useStore } from './store'
-import { useQuery } from './query'
 
 type TTableDef = State.SQLite.ClientDocumentTableDef.Trait<
   any,
@@ -14,7 +13,8 @@ type TTableDef = State.SQLite.ClientDocumentTableDef.Trait<
 >
 
 interface UseClientDocumentResult<T> {
-  state: WritableComputedRef<T>
+  state: Readonly<Ref<TTableDef['Value']>>
+  setState: (value: TTableDef['Value']) => void
   id: string | typeof SessionIdSymbol,
   query$: LiveQueryDef<T>
 }
@@ -37,38 +37,23 @@ export function useClientDocument<T = any>(
   }
 
   const query$ = queryDb(table.get(documentId, options))
-  const initialData = useQuery(query$) as T
-  const internalState = shallowRef<T>(initialData)
+  const state = shallowRef(store.query(query$))
 
-  // Flag to prevent infinite loops.
-  let isUpdatingFromStore = false
   const unsubscribe = store.subscribe(query$, {
     onUpdate: (result: T) => {
-      isUpdatingFromStore = true
-      internalState.value = result
-      isUpdatingFromStore = false
+      state.value = result
     }
   })
 
-  console.log('internalState', internalState.value)
-  console.log('initialData', initialData)
-  console.log('query$', query$)
-
-  const state = computed<T>({
-    get() {
-      return internalState.value
-    },
-    set(value: T) {
-      console.log('setting', value)
-      if (isUpdatingFromStore) return
-      store.commit(table.set({ value }, documentId))
-    }
-  })
+  const setState = (value: TTableDef['Value']) => {
+    store.commit(table.set(value, documentId))
+  }
 
   onUnmounted(() => unsubscribe())
 
   return {
     state,
+    setState,
     id: documentId,
     query$
   }
