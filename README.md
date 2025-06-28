@@ -64,7 +64,9 @@ store.commit(events.todoCreated({ id: crypto.randomUUID(), text: "Write document
 
 ### useClientDocument
 
-Serializes the client document variables into writable computed refs directly from the composable so we can write code like this:
+**🚨 useClientDocument interface is experimental and might change**
+
+Serializes the client document variables into writable computed refs directly from the composable which allows us to write code like this:
 
 ```vue
 <script setup lang="ts">

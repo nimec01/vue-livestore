@@ -27,6 +27,11 @@ export function useClientDocument<Value extends Record<string, any>>(
 ): UseClientDocumentResult<Value> {
   /* Used for clientDocuments only (UI state)
    *
+   * WARNING: The interface for this is still experimental.
+   * We might choose to revert to state, setState to match
+   * the react bindings and provide a separate composable
+   * or wrapper for better Vue DX.
+   *
    * Returns:
    * - ...uiState variabels as writable computed refs
    * - 'id': Document ID
