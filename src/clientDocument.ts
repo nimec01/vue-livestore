@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { onUnmounted, shallowRef, computed, type WritableComputedRef } from 'vue'
 
-import { queryDb, type SessionIdSymbol, type State, type RowQuery, type LiveQueryDef } from '@livestore/livestore'
+import { queryDb, SessionIdSymbol, State, type RowQuery, type LiveQueryDef } from '@livestore/livestore'
 
 import { useStore } from './store'
 
@@ -14,7 +14,7 @@ type ClientDocumentTable<Value extends Record<string, any>> =
   >
 
 type UseClientDocumentResult<Value extends Record<string, any>> = {
-  id: string | typeof SessionIdSymbol
+  id: string | SessionIdSymbol
   query$: LiveQueryDef<Value>
 } & {
   [K in keyof Value]: WritableComputedRef<Value[K]>
@@ -22,7 +22,7 @@ type UseClientDocumentResult<Value extends Record<string, any>> = {
 
 export function useClientDocument<Value extends Record<string, any>>(
   table: ClientDocumentTable<Value>,
-  id?: string | typeof SessionIdSymbol,
+  id?: string | SessionIdSymbol,
   options?: RowQuery.GetOrCreateOptions<ClientDocumentTable<Value>>,
 ): UseClientDocumentResult<Value> {
   /* Used for clientDocuments only (UI state)
@@ -53,7 +53,7 @@ export function useClientDocument<Value extends Record<string, any>>(
     throw new Error('Store not found. Make sure you are using LiveStoreProvider.')
   }
 
-  const documentId = id ?? table.default?.id
+  const documentId = id ?? store.clientSession.clientId
   if (!documentId) {
     throw new Error('Client document requires an ID')
   }
