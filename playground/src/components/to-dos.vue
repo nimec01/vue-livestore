@@ -24,19 +24,19 @@ const todos = store.useQuery(visibleTodos$)
 
 // Events
 const createTodo = () => {
-  store?.commit(events.todoCreated({ id: crypto.randomUUID(), text: newTodoText.value }))
+  store.commit(events.todoCreated({ id: crypto.randomUUID(), text: newTodoText.value }))
   newTodoText.value = ''
 }
 
 const deleteTodo = (id: string) => {
-  store?.commit(events.todoDeleted({ id, deletedAt: new Date() }))
+  store.commit(events.todoDeleted({ id, deletedAt: new Date() }))
 }
 
 const toggleCompleted = (id: string) => {
   if (todos.value.find((todo) => todo.id === id)?.completed) {
-    store?.commit(events.todoUncompleted({ id }))
+    store.commit(events.todoUncompleted({ id }))
   } else {
-    store?.commit(events.todoCompleted({ id }))
+    store.commit(events.todoCompleted({ id }))
   }
 }
 </script>
