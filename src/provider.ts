@@ -1,9 +1,9 @@
-import { defineComponent, provide, ref, type PropType } from 'vue'
+import { defineComponent, provide, ref, toRaw, watch, type PropType } from 'vue'
 import {
   type CreateStoreOptions,
   type LiveStoreSchema,
   type Store,
-  createStorePromise
+  createStorePromise,
 } from '@livestore/livestore'
 import { LiveStoreKey, withVueApi } from './store'
 
@@ -36,6 +36,19 @@ export const LiveStoreProvider = defineComponent({
     createStorePromise(props.options).then((store) => {
       storeRef.value = withVueApi(store)
     })
+
+    // Add __debugLiveStore property to window / globalThis
+    globalThis.__debugLiveStore ??= {}
+    watch(
+      () => storeRef.value,
+      (updatedStore) => {
+        if (Object.keys(globalThis.__debugLiveStore).length === 0) {
+          globalThis.__debugLiveStore._ = toRaw(updatedStore)
+        }
+        globalThis.__debugLiveStore[props.options.debug?.instanceId ?? props.options.storeId] =
+          toRaw(updatedStore)
+      },
+    )
 
     return () => {
       if (!storeRef.value) {
