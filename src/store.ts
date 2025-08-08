@@ -1,7 +1,7 @@
 import { inject, type InjectionKey } from 'vue'
 import { type Store } from '@livestore/livestore'
-import { useQuery } from '.'
-import { useClientDocument } from '.'
+import { useQuery } from './query'
+import { useClientDocument } from './clientDocument'
 
 export type VueApi = {
   useQuery: typeof useQuery,
