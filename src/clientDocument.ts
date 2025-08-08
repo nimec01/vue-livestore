@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { onUnmounted, shallowRef, computed, type WritableComputedRef } from 'vue'
 
-import { queryDb, SessionIdSymbol, State, type RowQuery, type LiveQueryDef } from '@livestore/livestore'
+import { queryDb, SessionIdSymbol, State, type RowQuery, type LiveQueryDef, type Store } from '@livestore/livestore'
 
 import { useStore } from './store'
 
-type ClientDocumentTable<Value extends Record<string, any>> =
+export type ClientDocumentTable<Value extends Record<string, any>> =
   State.SQLite.ClientDocumentTableDef.Trait<
     any,
     any,
@@ -24,6 +24,7 @@ export function useClientDocument<Value extends Record<string, any>>(
   table: ClientDocumentTable<Value>,
   id?: string | SessionIdSymbol,
   options?: RowQuery.GetOrCreateOptions<ClientDocumentTable<Value>>,
+  storeArg?: { store: Store }
 ): UseClientDocumentResult<Value> {
   /* Used for clientDocuments only (UI state)
    *
@@ -47,13 +48,13 @@ export function useClientDocument<Value extends Record<string, any>>(
    * <select v-model="filters" ...>
    */
 
-  const { store } = useStore()
+  const { store } = useStore(storeArg)
 
   if (!store) {
     throw new Error('Store not found. Make sure you are using LiveStoreProvider.')
   }
 
-  const documentId = id ?? store.clientSession.clientId
+  const documentId = id ?? SessionIdSymbol
   if (!documentId) {
     throw new Error('Client document requires an ID')
   }
