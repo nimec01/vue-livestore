@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { queryDb } from '@livestore/livestore'
 import { events, tables } from '../livestore/schema'
-import { useStore, useQuery, useClientDocument } from 'vue-livestore'
+import { useStore, useClientDocument } from 'vue-livestore'
 
 const { store } = useStore()
 
@@ -20,7 +20,7 @@ const visibleTodos$ = queryDb(
 )
 
 const { newTodoText, filter } = useClientDocument(tables.uiState)
-const todos = useQuery(visibleTodos$)
+const todos = store.useQuery(visibleTodos$)
 
 // Events
 const createTodo = () => {

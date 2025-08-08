@@ -20,5 +20,9 @@ export const useStore = (options?: { store: Store }) => {
   if (options?.store) {
     return { store: withVueApi(options.store) }
   }
-  return { store: inject(LiveStoreKey) }
+  const injected = inject(LiveStoreKey)
+  if (!injected) {
+    throw new Error('LiveStore instance not provided. Make sure to install the provider and pass a store.')
+  }
+  return { store: injected }
 }
